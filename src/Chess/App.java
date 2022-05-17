@@ -5,13 +5,12 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.awt.event.MouseMotionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-public class App extends JPanel implements MouseListener, MouseMotionListener {
+public class App extends JPanel implements MouseListener {
     private ChessField[][] board;
     private final BufferedImage[] images = new BufferedImage[12];
     private int x;
@@ -24,7 +23,6 @@ public class App extends JPanel implements MouseListener, MouseMotionListener {
 
     public void init() {
         this.addMouseListener(this);
-        this.addMouseMotionListener(this);
         Board temp = new Board();
         board = temp.getBoard();
         load();
@@ -278,16 +276,6 @@ public class App extends JPanel implements MouseListener, MouseMotionListener {
 
     @Override
     public void mouseExited(MouseEvent e) {
-
-    }
-
-    @Override
-    public void mouseDragged(MouseEvent e) {
-
-    }
-
-    @Override
-    public void mouseMoved(MouseEvent e) {
 
     }
 }
