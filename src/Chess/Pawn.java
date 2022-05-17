@@ -7,9 +7,8 @@ public class Pawn extends Piece {
     Pawn(String colour, char name) {
         super(colour, name);
     }
-
     @Override
-    public List<List<Integer>> getPossibleMoves(ChessField[][] board, int rf, int cf) {
+    public List<List<Integer>> getPossibleMoves(ChessField[][] board, int rf, int cf, Piece pieceLastMoved, int lastRow, int lastCol, boolean is2) {
         List<List<Integer>> possibleMoves = new ArrayList<>();
         String color = board[rf][cf].getPiece().getColor();
         int[] X = {0, 0, -1, 1};
@@ -41,7 +40,26 @@ public class Pawn extends Piece {
                 possibleMoves.add(move);
             }
         }
-
+        if(color=="white" && pieceLastMoved!=null && pieceLastMoved.getName()=='p'&& lastCol==cf && (lastRow==rf-1 || lastRow==rf+1) && is2){
+            List<Integer> move1 = new ArrayList<>();
+            List<Integer> move2 = new ArrayList<>();
+            move1.add(cf-1);
+            move1.add(rf-1);
+            move2.add(cf-1);
+            move2.add(rf+1);
+            possibleMoves.add(move1);
+            possibleMoves.add(move2);
+        }
+        else if(color=="black" && pieceLastMoved!=null && pieceLastMoved.getName()=='P'&& lastCol==cf && (lastRow==rf-1 || lastRow==rf+1) && is2){
+            List<Integer> move1 = new ArrayList<>();
+            List<Integer> move2 = new ArrayList<>();
+            move1.add(cf+1);
+            move1.add(rf-1);
+            move2.add(cf+1);
+            move2.add(rf+1);
+            possibleMoves.add(move1);
+            possibleMoves.add(move2);
+        }
         return possibleMoves;
     }
 }

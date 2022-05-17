@@ -9,7 +9,7 @@ public class Rook extends Piece {
     }
 
     @Override
-    public List<List<Integer>> getPossibleMoves(ChessField[][] board, int rf, int cf) {
+    public List<List<Integer>> getPossibleMoves(ChessField[][] board, int rf, int cf, Piece pieceLastMoved, int lastRow, int lastCol, boolean is2) {
         List<List<Integer>> possibleMoves = new ArrayList<>();
         String color = board[rf][cf].getPiece().getColor();
         int x1 = rf + 1;

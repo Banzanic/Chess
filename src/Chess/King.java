@@ -10,7 +10,7 @@ public class King extends Piece{
     }
 
     @Override
-    public List<List<Integer>> getPossibleMoves(ChessField[][] board, int rf, int cf) {
+    public List<List<Integer>> getPossibleMoves(ChessField[][] board, int rf, int cf, Piece pieceLastMoved, int lastRow, int lastCol, boolean is2) {
         List<List<Integer>> possibleMoves = new ArrayList<>();
         String color = board[rf][cf].getPiece().getColor();
         int[] X = {1, 1, 1, 0, -1, -1, -1, 0};
@@ -25,13 +25,67 @@ public class King extends Piece{
                 possibleMoves.add(move);
             }
         }
+        if(this.getMoveCounter()==0 && !castle){
+            boolean checkField=true;
+            if(color=="white"){
+                if(board[0][7].getPiece()!=null && board[0][7].getPiece().getName()=='R' && board[0][7].getPiece().getMoveCounter()==0){
+                    for(int i=1;i<board[rf][7].getRow();i++){
+                        if(board[i][0].getPiece()!=null){
+                            checkField=false;
+                        }
+                    }
+                    if(checkField){
+                        List<Integer> move = new ArrayList<>();
+                        move.add(7);
+                        move.add(2);
+                        possibleMoves.add(move);
+                    }
+                }
+                checkField=true;
+                if(board[7][7].getPiece()!=null && board[7][7].getPiece().getName()=='R' && board[7][7].getPiece().getMoveCounter()==0){
+                    for(int i=6;i>board[rf][7].getColumn();i--){
+                        if(board[i][0].getPiece()!=null){
+                            checkField=false;
+                        }
+                    }
+                    if(checkField){
+                        List<Integer> move = new ArrayList<>();
+                        move.add(7);
+                        move.add(6);
+                        possibleMoves.add(move);
+                    }
+                }
+            }
+            else{
+                if(board[0][0].getPiece()!=null && board[0][0].getPiece().getName()=='r' && board[0][0].getPiece().getMoveCounter()==0){
+                    for(int i=1;i<board[rf][0].getRow();i++){
+                        if(board[i][0].getPiece()!=null){
+                            checkField=false;
+                        }
+                    }
+                    if(checkField){
+                        List<Integer> move = new ArrayList<>();
+                        move.add(0);
+                        move.add(2);
+                        possibleMoves.add(move);
+                    }
+                }
+                checkField=true;
+                if(board[7][0].getPiece()!=null && board[7][0].getPiece().getName()=='r' && board[7][0].getPiece().getMoveCounter()==0){
+                    for(int i=6;i>board[rf][0].getRow();i--){
+                        if(board[i][0].getPiece()!=null){
+                            checkField=false;
+                        }
+                    }
+                    if(checkField){
+                        List<Integer> move = new ArrayList<>();
+                        move.add(0);
+                        move.add(6);
+                        possibleMoves.add(move);
+                    }
+                }
+            }
+        }
         return possibleMoves;
-    }
-
-    public boolean getCastle(){
-        return castle;
-    }
-    public void setCastle(boolean castle){
-        this.castle=castle;
     }
 }

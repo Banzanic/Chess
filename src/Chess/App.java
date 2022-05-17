@@ -19,8 +19,11 @@ public class App extends JPanel implements MouseListener, MouseMotionListener {
     private int y;
     private int toX;
     private int toY;
-    int movesCounter=0;
-    public boolean isChecked=false;
+    private boolean is2=false;
+    private int movesCounter=0;
+    private Piece pieceLastMoved=null;
+    private int lastRow=-1;
+    private int lastCol=-1;
     public void init() {
         this.addMouseListener(this);
         this.addMouseMotionListener(this);
@@ -127,26 +130,90 @@ public class App extends JPanel implements MouseListener, MouseMotionListener {
         int cf=y/64;
         if(board[rf][cf].getPiece()!=null) {
             if (board[rf][cf].getPiece() != null && ((board[rf][cf].getPiece().getColor() == "white" && movesCounter % 2 == 0) || (board[rf][cf].getPiece().getColor() == "black" && movesCounter % 2 != 0))) {
-                if (canMove(rf, cf, rt, ct)) {
+                if (canMove(rf, cf, rt, ct, pieceLastMoved, lastRow, lastCol, is2)) {
+                    if(board[rt][ct].getPiece()==null && board[rf][cf].getPiece().getName()=='p' && rf!=rt){
+                        board[rt][ct-1]=new ChessField(null,rt,ct-1);
+                    }
+                    else if(board[rt][ct].getPiece()==null && board[rf][cf].getPiece().getName()=='P' && rf!=rt){
+                        board[rt][ct+1]=new ChessField(null,rt,ct+1);
+                    }
+                    else if((board[rf][cf].getPiece().getName()=='k' || board[rf][cf].getPiece().getName()=='K') && rf-rt==2){
+                        System.out.println(rf+" "+rt);
+                        board[rf-1][cf] = new ChessField(board[0][cf].getPiece(), rf-1, cf);
+                        board[0][cf] = new ChessField(null, 0, cf);
+                    }
+                    else if((board[rf][cf].getPiece().getName()=='k' || board[rf][cf].getPiece().getName()=='K') && rf-rt==-2){
+                        System.out.println(rf+" "+cf);
+                        board[rf+1][cf] = new ChessField(board[7][cf].getPiece(), rf+1, cf);
+                        board[7][cf] = new ChessField(null, 7, cf);
+                    }
                     board[rt][ct] = new ChessField(board[rf][cf].getPiece(), rt, ct);
                     board[rf][cf] = new ChessField(null, rf, cf);
+                    if((board[rt][ct].getPiece().getName()=='p' || board[rt][ct].getPiece().getName()=='P') && ct==0 || ct==7){
+                        if(board[rt][ct].getPiece().getName()=='p'){
+                            board[rt][ct] = new ChessField(new Queen("black",'q'),rt,ct);
+                        }
+                        else{
+                            board[rt][ct] = new ChessField(new Queen("white",'Q'),rt,ct);
+                        }
+                    }
                     movesCounter++;
-                    if(isChecked(board, board[rt][ct].getPiece().getColor())) {
-                        board[rf][cf] = new ChessField(board[rt][ct].getPiece(), rf, cf);
-                        board[rt][ct] = new ChessField(null, rt, ct);
-                        movesCounter--;
+                    pieceLastMoved=board[rt][ct].getPiece();
+                    lastRow=rt;
+                    lastCol=ct;
+                    if(Math.abs(ct-cf)==2){
+                        is2=true;
+                    }
+                    else{
+                        is2=false;
+                    }
+                    board[rt][ct].getPiece().setMoveCounter();
+                    repaint();
+                    if(isGameOver((board[rt][ct].getPiece().getColor()))){
+                        if(!isChecked(board,"white") && !isChecked(board,"black")){
+                            JOptionPane.showMessageDialog(this, "Draw!", "", JOptionPane.INFORMATION_MESSAGE);
+                        }
+                        else{
+                            JOptionPane.showMessageDialog(this, "Victory!", "", JOptionPane.INFORMATION_MESSAGE);
+                        }
+                    }
+                }
+
+            }
+        }
+        repaint();
+    }
+    public boolean isGameOver(String color){
+        if(color.equals("white")){
+            color="black";
+        }
+        else{
+            color="white";
+        }
+        boolean check=false;
+        for(int i=0;i<8;i++){
+            for(int j=0;j<8;j++){
+                if(board[i][j].getPiece()!=null && board[i][j].getPiece().getColor()==color) {
+                    List<List<Integer>> possibleMoves=board[i][j].getPiece().getPossibleMoves(board,i,j,pieceLastMoved,lastRow,lastCol,is2);
+                    for(List k:possibleMoves){
+                        if(canMove(i,j,(int)k.get(1),(int)k.get(0),pieceLastMoved,lastRow,lastCol,is2)){
+                            check=true;
+                        }
                     }
                 }
             }
         }
-        repaint();
+        if(check){
+            return false;
+        }
+        return true;
     }
     public List<List<List<Integer>>> possibleMovesForEnemy(ChessField[][] board, String color) {
         List<List<List<Integer>>> possibleMoves = new ArrayList<>();
         for(int i=0; i<8; i++) {
             for(int j=0; j<8; j++) {
                 if(board[i][j].getPiece()!=null && board[i][j].getPiece().getColor().equals(color)) {
-                    possibleMoves.add(board[i][j].getPiece().getPossibleMoves(board,i,j));
+                    possibleMoves.add(board[i][j].getPiece().getPossibleMoves(board,i,j,pieceLastMoved,lastRow,lastCol,is2));
                 }
             }
         }
@@ -195,13 +262,21 @@ public class App extends JPanel implements MouseListener, MouseMotionListener {
         }
         return false;
     }
-    public boolean canMove(int rf, int cf, int rt, int ct){
-        List<List<Integer>> possibleMoves=board[rf][cf].getPiece().getPossibleMoves(board,rf,cf);
+    public boolean canMove(int rf, int cf, int rt, int ct, Piece pieceLastMoved, int lastRow, int lastCol, boolean is2){
+        List<List<Integer>> possibleMoves=board[rf][cf].getPiece().getPossibleMoves(board,rf,cf,pieceLastMoved,lastRow,lastCol,is2);
         List<Integer> move=new ArrayList<>();
         move.add(ct);
         move.add(rt);
+        ChessField[][] copy=new ChessField[8][8];
+        for(int i=0;i<8;i++){
+            for(int j=0;j<8;j++){
+                copy[i][j]=board[i][j];
+            }
+        }
+        copy[rt][ct] = new ChessField(copy[rf][cf].getPiece(), rt, ct);
+        copy[rf][cf] = new ChessField(null, rf, cf);
         for(List i:possibleMoves){
-            if(i.equals(move)){
+            if(i.equals(move) && !isChecked(copy, copy[rt][ct].getPiece().getColor())){
                 return true;
             }
         }

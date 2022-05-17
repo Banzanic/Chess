@@ -9,7 +9,7 @@ public class Knight extends Piece {
     }
 
     @Override
-    public List<List<Integer>> getPossibleMoves(ChessField[][] board, int rf, int cf) {
+    public List<List<Integer>> getPossibleMoves(ChessField[][] board, int rf, int cf, Piece pieceLastMoved, int lastRow, int lastCol, boolean is2) {
         List<List<Integer>> possibleMoves = new ArrayList<>();
         String color = board[rf][cf].getPiece().getColor();
         int[] X = {2, 1, -1, -2, -2, -1, 1, 2};
