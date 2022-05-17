@@ -16,30 +16,29 @@ public class Bishop extends Piece {
         int x2 = rf + 1, y2 = cf - 1;
         int x3 = rf - 1, y3 = cf + 1;
         int x4 = rf - 1, y4 = cf - 1;
-        if(color=="white"){
-            x1=rf-1;
-            x2=rf-1;
-            x3=rf+1;
-            x4=rf+1;
-            y1=cf-1;
-            y2=cf+1;
-            y3=cf-1;
-            y4=cf+1;
+        if (color.equals("white")) {
+            x1 = rf - 1;
+            x2 = rf - 1;
+            x3 = rf + 1;
+            x4 = rf + 1;
+            y1 = cf - 1;
+            y2 = cf + 1;
+            y3 = cf - 1;
+            y4 = cf + 1;
         }
-        while (x1>=0 && x1 <= 7 && y1 <= 7 && y1>=0) {
-            if (board[x1][y1].getPiece()==null || !board[x1][y1].getPiece().getColor().equals(color)) {
+        while (x1 >= 0 && x1 <= 7 && y1 <= 7 && y1 >= 0) {
+            if (board[x1][y1].getPiece() == null || !board[x1][y1].getPiece().getColor().equals(color)) {
                 List<Integer> move = new ArrayList<>();
                 move.add(y1);
                 move.add(x1);
                 possibleMoves.add(move);
-                if(board[x1][y1].getPiece()!=null){
+                if (board[x1][y1].getPiece() != null) {
                     break;
                 }
-                if(color=="black") {
+                if (color.equals("black")) {
                     x1++;
                     y1++;
-                }
-                else{
+                } else {
                     x1--;
                     y1--;
                 }
@@ -47,20 +46,19 @@ public class Bishop extends Piece {
                 break;
             }
         }
-        while (x2>=0 && x2 <= 7 && y2 <= 7 && y2>=0) {
-            if (board[x2][y2].getPiece()==null || !board[x2][y2].getPiece().getColor().equals(color)) {
+        while (x2 >= 0 && x2 <= 7 && y2 <= 7 && y2 >= 0) {
+            if (board[x2][y2].getPiece() == null || !board[x2][y2].getPiece().getColor().equals(color)) {
                 List<Integer> move = new ArrayList<>();
                 move.add(y2);
                 move.add(x2);
                 possibleMoves.add(move);
-                if(board[x2][y2].getPiece()!=null){
+                if (board[x2][y2].getPiece() != null) {
                     break;
                 }
-                if(color=="black") {
+                if (color.equals("black")) {
                     x2++;
                     y2--;
-                }
-                else{
+                } else {
                     x2--;
                     y2++;
                 }
@@ -68,20 +66,19 @@ public class Bishop extends Piece {
                 break;
             }
         }
-        while (x3>=0 && x3 <= 7 && y3 <= 7 && y3>=0) {
-            if (board[x3][y3].getPiece()==null || !board[x3][y3].getPiece().getColor().equals(color)) {
+        while (x3 >= 0 && x3 <= 7 && y3 <= 7 && y3 >= 0) {
+            if (board[x3][y3].getPiece() == null || !board[x3][y3].getPiece().getColor().equals(color)) {
                 List<Integer> move = new ArrayList<>();
                 move.add(y3);
                 move.add(x3);
                 possibleMoves.add(move);
-                if(board[x3][y3].getPiece()!=null){
+                if (board[x3][y3].getPiece() != null) {
                     break;
                 }
-                if(color=="black") {
+                if (color.equals("black")) {
                     x3--;
                     y3++;
-                }
-                else{
+                } else {
                     x3++;
                     y3--;
                 }
@@ -89,20 +86,19 @@ public class Bishop extends Piece {
                 break;
             }
         }
-        while (x4>=0 && x4 <= 7 && y4 <= 7 && y4>=0) {
-            if (board[x4][y4].getPiece()==null || !board[x4][y4].getPiece().getColor().equals(color)) {
+        while (x4 >= 0 && x4 <= 7 && y4 <= 7 && y4 >= 0) {
+            if (board[x4][y4].getPiece() == null || !board[x4][y4].getPiece().getColor().equals(color)) {
                 List<Integer> move = new ArrayList<>();
                 move.add(y4);
                 move.add(x4);
                 possibleMoves.add(move);
-                if(board[x4][y4].getPiece()!=null){
+                if (board[x4][y4].getPiece() != null) {
                     break;
                 }
-                if(color=="black") {
+                if (color.equals("black")) {
                     x4--;
                     y4--;
-                }
-                else{
+                } else {
                     x4++;
                     y4++;
                 }

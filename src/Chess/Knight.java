@@ -15,7 +15,7 @@ public class Knight extends Piece {
         int[] X = {2, 1, -1, -2, -2, -1, 1, 2};
         int[] Y = {1, 2, 2, 1, -1, -2, -2, -1};
         for (int i = 0; i < 8; i++) {
-            if (color == "white") {
+            if (color.equals("white")) {
                 X[i] = X[i] * -1;
                 Y[i] = Y[i] * -1;
             }
